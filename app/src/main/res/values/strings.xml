@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NewTube</string>
+    <string name="action_settings">Settings</string>
+    <string name="retry">Retry</string>
+    <string name="search_hint">search video</string>
+    <string name="default_query">trump HD</string>
+    <string name="behav">com.logicchip.blog_14_floatingsearchview.ScrollFabBehavior</string>
+</resources>
