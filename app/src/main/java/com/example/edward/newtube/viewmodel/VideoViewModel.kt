@@ -3,6 +3,7 @@ package com.example.edward.newtube.viewmodel
 import android.arch.lifecycle.*
 import com.example.edward.newtube.model.QueryData
 import com.example.edward.newtube.repository.YoutubeRepository
+import com.example.edward.newtube.util.PAGEDLIST_PAGE_SIZE
 
 
 /**
@@ -11,10 +12,9 @@ import com.example.edward.newtube.repository.YoutubeRepository
 class VideoViewModel: ViewModel() {
     private val repository: YoutubeRepository = YoutubeRepository.getInstance()
     private val queryString = MutableLiveData<String>()
-    private val queryData = Transformations.map(queryString){ QueryData(it) }
     private val searchResult =
-            Transformations.map(queryData) {
-                repository.getRepository().postsOfSearchYoutube(it, 30)
+            Transformations.map(queryString) {
+                repository.getRepository().postsOfSearchYoutube(QueryData(it), PAGEDLIST_PAGE_SIZE)
             }
     val videoList = Transformations.switchMap(searchResult, { it.pagedList })!!
     val networkState = Transformations.switchMap(searchResult, { it.networkState })!!

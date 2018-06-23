@@ -27,10 +27,6 @@ class InMemoryByPageKeyedRepository(private val youtubeApi: YoutubeAPI,
                         .setFetchExecutor(networkExecutor)
                         .build()
 
-        val refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) { it ->
-            it.initialLoad
-        }
-
         return LiveDataPagedListing(
                 pagedList = livePagedList,
                 networkState = Transformations.switchMap(sourceFactory.sourceLiveData) { it.networkState },

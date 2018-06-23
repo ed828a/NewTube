@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -12,13 +13,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.example.edward.newtube.adapter.MainVideoListAdapter
 import com.example.edward.newtube.model.NetworkState
 import com.example.edward.newtube.model.VideoModel
+import com.example.edward.newtube.ui.VideoPlayActivity
 import com.example.edward.newtube.util.DEFAULT_QUERY
 import com.example.edward.newtube.util.GlideApp
 import com.example.edward.newtube.util.KEY_QUERY
+import com.example.edward.newtube.util.VIDEO_MODEL
 import com.example.edward.newtube.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -54,12 +56,10 @@ class MainActivity : AppCompatActivity() {
                 glide,
                 { queryViewModel.retry() },
                 {
-//                    val intent = Intent(this@MainActivity, VideoPlayActivity::class.java)
-//                    ChannelModel(it.title, "", it.date, it.thumbnail, it.videoId)
-//                    intent.putExtra(CHANNEL_MODEL,
-//                            ChannelModel(it.title, "", it.date, it.thumbnail, it.videoId))
-//                    startActivity(intent)
-                    Toast.makeText(this, "you clicked this item.", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@MainActivity, VideoPlayActivity::class.java)
+                    intent.putExtra(VIDEO_MODEL, it)
+                    startActivity(intent)
+                    Log.d("MainVideoListAdapter", "Video ID: ${it.videoId}")
                 })
 
         mainListView.adapter = adapter
@@ -84,13 +84,11 @@ class MainActivity : AppCompatActivity() {
     private fun initSearch() {
         searchViewQuery.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null){
-                    query.trim().let {
-                        if (it.isNotEmpty()){
-                            if (queryViewModel.showSearchQuery(it)){
-                                mainListView.scrollToPosition(0)
-                                (mainListView.adapter as? MainVideoListAdapter)?.submitList(null)
-                            }
+                query?.trim()?.let {
+                    if (it.isNotEmpty()){
+                        if (queryViewModel.showSearchQuery(it)){
+                            mainListView.scrollToPosition(0)
+                            (mainListView.adapter as? MainVideoListAdapter)?.submitList(null)
                         }
                     }
                 }
