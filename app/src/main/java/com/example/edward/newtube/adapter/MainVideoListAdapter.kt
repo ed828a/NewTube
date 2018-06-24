@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerInside
 import com.example.edward.newtube.R
 import com.example.edward.newtube.model.NetworkState
 import com.example.edward.newtube.model.VideoModel
@@ -28,7 +29,7 @@ class MainVideoListAdapter(
             R.layout.cell_video -> {
                 val view = LayoutInflater.from(parent.context)
                         .inflate(R.layout.cell_video, parent, false)
-                MainVideoListViewHolder(view, glide)
+                MainVideoListViewHolder(view)
             }
             R.layout.cell_network_state -> {
                 val view = LayoutInflater.from(parent.context)
@@ -82,7 +83,7 @@ class MainVideoListAdapter(
         }
     }
 
-    inner class MainVideoListViewHolder(itemView: View, glide: GlideRequests) : RecyclerView.ViewHolder(itemView) {
+    inner class MainVideoListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textViewTitle = itemView.textViewTitle
         private val textViewDesc = itemView.textViewChannelTitle
         private val textViewDate = itemView.textViewDate
@@ -97,7 +98,7 @@ class MainVideoListAdapter(
         fun bind(videoModel: VideoModel) {
             textViewTitle.text = videoModel.title
             textViewDate.text = videoModel.date
-            glide.load(videoModel.thumbnail).centerCrop().into(imageViewThumb)
+            glide.load(videoModel.thumbnail).into(imageViewThumb)
         }
     }
 
